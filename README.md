@@ -70,7 +70,7 @@ python PAR_trainer.py
 
 ### 4. Lane Keeping for Autonomous Vehicles
 
-**a) CarRacing (`carracing_exp/`)**
+**a) CarRacing (`CarRacing_exp/`)**
 
 ```bash
 python drive.py
@@ -101,18 +101,6 @@ Dataset and code for RUL estimation experiments.
 python rul_trainer.py
 ```
 
----
-
-## Folder Structure
-
-```
-├── mnist_exp/         # Event-based MNIST experiment code
-├── PAR_exp/           # Person Activity Recognition experiment code
-├── carracing_exp/     # Lane keeping CarRacing experiment code
-├── Udacity_exp/       # Lane keeping Udacity Simulator code
-├── RUL_exp/           # Remaining Useful Life experiment code
-└── plots/            # GIFs and images
-```
 
 ---
 
