@@ -10,8 +10,7 @@ This repository contains implementations and experiments for the **Liquid Attent
 
 Demonstration and verification of LAN’s universal approximation capability.
 
-![Universal Approximation Demo](assets/universal_approximation.gif)
-*Replace `assets/universal_approximation.gif` with your GIF file path.*
+![Universal Approximation Demo](plots/uat.gif)
 
 ---
 
