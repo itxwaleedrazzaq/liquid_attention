@@ -4,6 +4,35 @@ This repository contains implementations and experiments for the **Liquid Attent
 
 ---
 
+## LAN Model Example
+
+```python
+import tensorflow as tf
+# from liquid_attention import LAN
+
+# Create the model
+inputs = tf.keras.Input(shape=(1, 1))
+attn = LAN(
+    d_model=64,
+    num_heads=16,
+    mode='exact, #steady or euler
+    delta_t=0.1,
+    euler_steps=10,
+    activation='sigmoid',
+    return_sequences=False
+)(inputs)
+outputs = tf.keras.layers.Dense(1)(attn)
+model = tf.keras.Model(inputs=inputs, outputs=outputs)
+
+# Compile the model
+model.compile(
+    optimizer='adam',
+    loss='mse',
+    metrics=['mae']
+)
+```
+
+
 ## Experiments
 
 ### 1. Universal Approximation Verification
