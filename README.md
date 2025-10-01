@@ -22,7 +22,7 @@ Training and evaluation on the event-based MNIST dataset.
 
 ```bash
 # Example: how to run training
-python train_mnist.py
+python mnist_trainer.py
 ```
 
 ---
@@ -35,7 +35,7 @@ Activity recognition experiment implementation.
 
 ```bash
 # Example: how to run
-python run_par.py
+python PAR_trainer.py
 ```
 
 ---
@@ -67,7 +67,7 @@ Dataset and code for RUL estimation experiments.
 
 ```bash
 # Example: how to run
-python run_rul.py
+python rul_trainer.py
 ```
 
 ---
@@ -80,7 +80,7 @@ python run_rul.py
 ├── carracing_exp/     # Lane keeping CarRacing experiment code
 ├── Udacity_exp/       # Lane keeping Udacity Simulator code
 ├── RUL_exp/           # Remaining Useful Life experiment code
-└── assets/            # GIFs and images
+└── plots/            # GIFs and images
 ```
 
 ---
