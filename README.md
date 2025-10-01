@@ -8,7 +8,7 @@ This repository contains implementations and experiments for the **Liquid Attent
 
 ```python
 import tensorflow as tf
-# from liquid_attention import LAN
+from liquid_attention import LAN
 
 # Create the model
 inputs = tf.keras.Input(shape=(1, 1))
