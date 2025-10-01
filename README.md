@@ -1,6 +1,6 @@
 # Liquid Attention Network (LAN)
 
-This repository contains implementations and experiments for the **Liquid Attention Network (LAN)** developed at Con [update with full name or link later].
+This repository contains implementations and experiments for the **Liquid Attention Network (LAN)** developed at Networked Intelligent Control (NIC) Lab, University of Science and Technology of China (USTC).
 
 ---
 
