@@ -45,6 +45,8 @@ python PAR_trainer.py
 ```bash
 python drive.py
 ```
+[Watch the demo on YouTube](https://youtu.be/PAclVXbzsms)
+
 
 **b) Udacity Simulator (`Udacity_exp/`)**
 
@@ -54,6 +56,7 @@ python drive.py
 ```bash
 python drive.py model_weights/Udacity_LAN.keras
 ```
+[Watch the demo on YouTube](https://youtu.be/tKfO55TwN0M)
 
 ---
 
