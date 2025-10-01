@@ -21,7 +21,6 @@ Training and evaluation on the event-based MNIST dataset.
 * Code available in: `mnist_exp/`
 
 ```bash
-# Example: how to run training
 python mnist_trainer.py
 ```
 
@@ -34,7 +33,6 @@ Activity recognition experiment implementation.
 * Code available in: `PAR_exp/`
 
 ```bash
-# Example: how to run
 python PAR_trainer.py
 ```
 
