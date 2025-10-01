@@ -19,7 +19,8 @@ attn = LAN(
     delta_t=0.1,
     euler_steps=10,
     activation='sigmoid',
-    return_sequences=False
+    return_sequences=False,
+    return_attention=False
 )(inputs)
 outputs = tf.keras.layers.Dense(1)(attn)
 model = tf.keras.Model(inputs=inputs, outputs=outputs)
