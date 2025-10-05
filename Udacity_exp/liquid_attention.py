@@ -5,21 +5,21 @@ class LAN(tf.keras.layers.Layer):
     """
     Liquid Attention layer (multi-head) with three possible modes:
       - mode='steady' : steady-state solution e* = phi / tau
-      - mode='euler'  : forward Euler iteration e_{n+1} = e_n + (dt/tau)(-e_n + phi)
+      - mode='euler'  : forward Euler iteration e_{n+1} = e_n + (dt)(-e_n*tau + phi)
       - mode='exact'  : closed-form solution a(t) = (phi/tau) * (1 - exp(-tau * t))
     """
 
     def __init__(
         self,
-        d_model,
-        num_heads : int = 8,
-        phi_hidden : int = 64,
-        tau_epsilon : float = 1e-6,
+        d_model : int,
+        num_heads : int,
         mode : str = 'exact',           # 'steady', 'euler', or 'exact'
         euler_steps : int = 5,
+        activation = None,
+        phi_hidden : int = 64,
+        tau_epsilon : float = 1e-6,
         delta_t : float = 0.5,
         dropout : float = 0.0,
-        activation = None,
         use_bias : bool = True,
         return_attention : bool = False,
         return_sequences : bool = False,
@@ -37,6 +37,7 @@ class LAN(tf.keras.layers.Layer):
           - euler_steps: number of iterations for Euler method
           - delta_t: time-step for Euler solver
           - dropout: dropout rate for attention weights
+          - activation: activation function for output
           - return_attention: whether to return attention weights
           - return_sequences: whether to return the full sequence or last step
         '''
@@ -137,7 +138,7 @@ class LAN(tf.keras.layers.Layer):
 
     def compute_phi_tau(self, q, k, t):
         '''
-        Compute phi (interaction term), tau (time constant) and t (interpolation time) for each query-key pair.
+        Compute phi (target-content gate), tau (time constant gate) and t (interpolation time) for each query-key pair.
 
         Args:
           q, k: [B, H, T, D]
@@ -179,6 +180,7 @@ class LAN(tf.keras.layers.Layer):
         Args:
           inputs: can be
             - single tensor (self-attention)
+            - tuple of 2 tensors ((q, k, v), t)
             - tuple of 3 tensors (q, k, v)
             - tuple of 4 tensors (q, k, v, t)
           mask: optional attention mask
@@ -222,7 +224,7 @@ class LAN(tf.keras.layers.Layer):
         elif self.mode == 'euler':
             a = tf.zeros_like(phi)
             for _ in range(self.euler_steps):
-                increment = dt * (tau * a + phi)
+                increment = dt * (-tau * a + phi)
                 a = a + increment
             attn_logits = a
 
@@ -243,12 +245,11 @@ class LAN(tf.keras.layers.Layer):
         combined = self.combine_heads(output)
         out = self.activation(self.out_dense(combined))
 
-        # Optional returns
+        result = out if self.return_sequences else out[:, -1, :]
         if self.return_attention:
-            return out, attn_weights
-        if self.return_sequences:
-            return out
-        return out[:, -1, :]
+            return result, attn_weights
+        return result
+
 
     def get_config(self):
         '''Return layer configuration for serialization.'''
