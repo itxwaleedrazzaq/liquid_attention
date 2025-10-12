@@ -1,9 +1,9 @@
 # Liquid Attention Network (LAN)
 ---
-The repository contains the code of Liquid Attention Network devleoped at Networked Intelligent Control (NIC) Lab at University of Science and Technology of China (USTC).
+The repository contains the code of the Liquid Attention Network developed at the Networked Intelligent Control (NIC) Lab at the University of Science and Technology of China (USTC).
 
 
-## LAN Model Example
+## LAN Model Usage Example
 
 ```python
 import tensorflow as tf
