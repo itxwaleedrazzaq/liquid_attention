@@ -239,7 +239,7 @@ class LAN(tf.keras.layers.Layer):
         attn_weights = tf.nn.softmax(attn_logits, axis=-1)
         attn_weights = self.attn_dropout(attn_weights, training=training)
 
-        # Weighted sum of values
+        # Integrated output
         output = tf.matmul(attn_weights, vh)
 
         # Combine heads and final projection
