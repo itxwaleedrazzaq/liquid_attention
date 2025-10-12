@@ -231,6 +231,7 @@ class LAN(tf.keras.layers.Layer):
         # Apply mask
         if mask is not None:
             mask = tf.cast(mask, attn_logits.dtype)
+            mask = tf.expand_dims(tf.expand_dims(mask, axis=1), axis=1)  # [batch, 1, 1, seq_len]
             very_neg = tf.constant(-1e9, dtype=attn_logits.dtype)
             attn_logits = attn_logits + (1.0 - mask) * very_neg
 
@@ -238,7 +239,7 @@ class LAN(tf.keras.layers.Layer):
         attn_weights = tf.nn.softmax(attn_logits, axis=-1)
         attn_weights = self.attn_dropout(attn_weights, training=training)
 
-        # Weighted sum of values
+        # Integrated output
         output = tf.matmul(attn_weights, vh)
 
         # Combine heads and final projection
