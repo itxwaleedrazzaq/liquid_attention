@@ -10,9 +10,13 @@ from liquid_attention import LAN
 
 # === 1. Generate synthetic time series ===
 np.random.seed(42)
-time = np.arange(0, 500, 0.01)
+# Create irregular time intervals
+num_points = 50000
+time = np.cumsum(np.random.uniform(0.005, 0.02, size=num_points))  # irregular steps
 values = np.sin(time) + np.random.normal(0, 0.05, len(time))
+
 df = pd.DataFrame({"time": time, "value": values})
+
 
 # === 2. Randomly remove values ===
 missing_rate = 0.05
@@ -41,7 +45,7 @@ model = Sequential([
 ])
 
 model.compile(
-    optimizer=RMSprop(learning_rate=0.01),
+    optimizer=RMSprop(learning_rate=0.0001),
     loss='mse',
     metrics=['mae']
 )
@@ -66,7 +70,7 @@ imputed = scaler.inverse_transform(reconstructed_full.reshape(-1, 1)).flatten()
 df["imputed"] = df["value"].fillna(pd.Series(imputed, index=df.index))
 
 # === 9. Plot only test data ===
-test_split = 0.95  # last 20% of data as test
+test_split = 0.95  # last 5% of data as test
 test_start = int(len(df) * test_split)
 test_df = df.iloc[test_start:]
 test_mask = mask[test_start:]
@@ -103,4 +107,5 @@ plt.grid(True, linestyle="--", alpha=0.5)
 plt.ylabel("Value")
 plt.legend(loc="upper right")
 plt.tight_layout()
+plt.savefig("time_series_imputation.png", dpi=1200)
 plt.show()
