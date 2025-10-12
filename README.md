@@ -101,6 +101,16 @@ python rul_trainer.py
 ```
 
 
+### 6. Seq2Seq Time-Series Imputation
+Code for LAN imputation experiment.
+
+* Code and data available in: `Impute_exp/`
+
+```bash
+# Example: how to run
+python impute.py
+```
+
 ---
 
 ## License
