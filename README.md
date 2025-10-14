@@ -106,6 +106,11 @@ Code for LAN imputation experiment.
 
 * Code and data available in: `Impute_exp/`
 
+### 7. Ablation Experiments
+Code for LAN ablation experiment.
+
+* Code and data available in: `ablation_exp/`
+
 ```bash
 # Example: how to run
 python impute.py
