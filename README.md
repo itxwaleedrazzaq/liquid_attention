@@ -105,6 +105,10 @@ python rul_trainer.py
 Code for LAN imputation experiment.
 
 * Code and data available in: `Impute_exp/`
+```bash
+# Example: how to run
+python impute.py
+```
 
 ### 7. Ablation Experiments
 Code for LAN ablation experiment.
@@ -113,7 +117,7 @@ Code for LAN ablation experiment.
 
 ```bash
 # Example: how to run
-python impute.py
+python ablation.py
 ```
 
 ---
