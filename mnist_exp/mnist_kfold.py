@@ -13,7 +13,7 @@ from sklearn.model_selection import StratifiedKFold
 from liquid_attention import LAN
 from ncps.tf import LTCCell, CfCCell
 from ncps.wirings import FullyConnected
-from baseline_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE
+from baseline_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE, ODEformer
 from tensorflow.keras.optimizers import AdamW
 from tensorflow.keras.datasets import mnist
 
@@ -110,6 +110,9 @@ def build_model(cell_type, input_shape=(256,2), num_classes=10):
     elif cell_type == "MultiHeadAttention":
         x = MultiHeadAttention(num_heads=8, key_dim=32)(x, x)
         x = Flatten()(x)
+    elif cell_type == "odeformer":
+        x = ODEformer(hidden_dim=64, num_heads=8, ff_dim=128)(x)
+        x = Flatten()(x)
     elif cell_type == "LiquidAttention_Exact":
         x = LAN(d_model=64,num_heads=8, delta_t=0.1, mode='exact', return_sequences=False)(x)
     elif cell_type == "LiquidAttention_Euler":
@@ -126,7 +129,7 @@ def build_model(cell_type, input_shape=(256,2), num_classes=10):
 # ---- Model types ----
 model_types = [
     "RNNCell", "LSTMCell", "GRUCell", 'GRUODE', 'CTRNNCell', 'PhasedLSTM',
-    'ODELSTM', "CfCCell", "LTCCell", "MultiHeadAttention", 'Attention',
+    'ODELSTM', "CfCCell", "LTCCell", "MultiHeadAttention", 'Attention','odeformer',
     "LiquidAttention_Exact", "LiquidAttention_Euler", "LiquidAttention_Steady"
 ]
 
