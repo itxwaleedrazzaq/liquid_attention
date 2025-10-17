@@ -17,7 +17,7 @@ from sklearn.model_selection import StratifiedKFold
 from liquid_attention import LAN
 from ncps.tf import LTCCell, CfCCell
 from ncps.wirings import FullyConnected
-from baselines_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE
+from baselines_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE,ODEformer
 
 
 base_model_name = 'CarRacing'
@@ -85,6 +85,9 @@ def build_model(cell_type,input_shape=(None,96,96,3), num_classes=5):
     elif cell_type == "MultiHeadAttention":
         x = MultiHeadAttention(num_heads=8, key_dim=64)(x,x)
         x = tf.keras.layers.Lambda(lambda t: tf.squeeze(t, axis=1))(x)
+    elif cell_type == "odeformer":
+        x = ODEformer(hidden_dim=64, num_heads=16, ff_dim=64)(x)
+        x = tf.keras.layers.Lambda(lambda t: tf.squeeze(t, axis=1))(x)
     elif cell_type == "LiquidAttention_Exact":
         x = LAN(d_model=64,num_heads=16, mode='exact',return_sequences=False)(x)
     elif cell_type == "LiquidAttention_Euler":
@@ -102,7 +105,7 @@ def build_model(cell_type,input_shape=(None,96,96,3), num_classes=5):
 model_types = [
     "RNNCell", "LSTMCell", "GRUCell", 'GRUODE', 'CTRNNCell', 'PhasedLSTM',
     'ODELSTM', "CfCCell", "LTCCell", 
-    "MultiHeadAttention", 'Attention',
+    "MultiHeadAttention", 'Attention','odeformer',
     "LiquidAttention_Exact", "LiquidAttention_Euler", "LiquidAttention_Steady"
 ]
 
