@@ -1,4 +1,3 @@
-# main_fixed.py
 import os
 os.environ['TF_USE_LEGACY_KERAS'] = '1'
 import numpy as np
@@ -18,7 +17,7 @@ from utils.udacity_utils import batch_generator, INPUT_SHAPE
 from liquid_attention import LAN
 from ncps.tf import LTCCell, CfCCell
 from ncps.wirings import FullyConnected
-from baseline_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE
+from baseline_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE,ODEformer
 
 # Paths and hyperparameters
 base_model_name = 'Udacity_Simulator'
@@ -77,6 +76,9 @@ def build_model(cell_type, input_shape=INPUT_SHAPE, num_classes=1):
     elif cell_type == "MultiHeadAttention":
         x = MultiHeadAttention(num_heads=16, key_dim=64)(x, x)
         x = Flatten()(x)
+    elif cell_type == "odeformer":
+        x = ODEformer(hidden_dim=64, num_heads=16, ff_dim=128)(x)
+        x = Flatten()(x)
     elif cell_type == "LiquidAttention_Exact":
         x = LAN(d_model=64, num_heads=16, mode='exact', return_sequences=False)(x)
     elif cell_type == "LiquidAttention_Euler":
@@ -106,7 +108,7 @@ def get_callbacks(model_name):
 # Model types
 model_types = [
     "RNNCell", "LSTMCell", "GRUCell", "GRUODE", "CTRNNCell", "PhasedLSTM",
-     "ODELSTM","CfCCell", "LTCCell", "MultiHeadAttention", "Attention",
+     "ODELSTM","CfCCell", "LTCCell", "MultiHeadAttention", "Attention",'odeformer',
     "LiquidAttention_Exact", "LiquidAttention_Euler", "LiquidAttention_Steady"
 ]
 
