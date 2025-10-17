@@ -1,4 +1,3 @@
-# main.py
 import os
 os.environ['TF_USE_LEGACY_KERAS'] = '1'
 import numpy as np
@@ -19,7 +18,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import KFold
 from ncps.tf import LTCCell, CfCCell
 from ncps.wirings import FullyConnected
-from baseline_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE
+from baseline_cells import CTRNNCell, ODELSTM, CTGRU, GRUD, PhasedLSTM, GRUODE,ODEformer
 from tensorflow.keras.optimizers import RMSprop, AdamW
 
 base_model_name = 'Degradation_Estimation'
@@ -103,6 +102,9 @@ def build_model(cell_type, input_shape=(16,), num_classes=1):
     elif cell_type == "MultiHeadAttention":
         x = MultiHeadAttention(num_heads=4, key_dim=16)(x, x)
         x = Flatten()(x)
+    elif cell_type == "odeformer":
+        x = ODEformer(hidden_dim=16, num_heads=8, ff_dim=64)(x)
+        x = Flatten()(x)
     elif cell_type == "LiquidAttention_Exact":
         x = LAN(d_model=16,num_heads=8, mode="exact", return_sequences=False)(x)
     elif cell_type == "LiquidAttention_Euler":
@@ -118,7 +120,7 @@ def build_model(cell_type, input_shape=(16,), num_classes=1):
 # List of model types
 model_types = [
     "RNNCell", "LSTMCell", "GRUCell", 'GRUODE', 'CTRNNCell', 'PhasedLSTM',
-    'ODELSTM', "CfCCell", "LTCCell", "MultiHeadAttention", 'Attention',
+    'ODELSTM', "CfCCell", "LTCCell", "MultiHeadAttention", 'Attention','odeformer',
     "LiquidAttention_Exact", "LiquidAttention_Euler", "LiquidAttention_Steady"
 ]
 
