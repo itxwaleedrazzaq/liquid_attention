@@ -693,3 +693,43 @@ class HawkLSTMCell(tf.keras.layers.Layer):
         output_state = tf.nn.tanh(c_t) * output_gate
 
         return output_state, [new_c, new_c_bar, output_state]
+
+#implemented based on the ODE-Transformer paper: https://arxiv.org/abs/2310.05573
+
+class ODEformer(tf.keras.layers.Layer):
+    def __init__(self, hidden_dim, num_heads=4, ff_dim=None, n_steps=3, step_size=0.25, dropout=0.1):
+        super().__init__()
+        self.hidden_dim = hidden_dim
+        self.num_heads = num_heads
+        self.ff_dim = ff_dim or 4 * hidden_dim
+        self.n_steps = n_steps
+        self.step_size = step_size
+        self.dropout_rate = dropout
+
+    def build(self, input_shape):
+        input_dim = input_shape[-1]
+        if input_dim != self.hidden_dim:
+            # add projection to match dimensions
+            self.input_proj = tf.keras.layers.Dense(self.hidden_dim)
+        else:
+            self.input_proj = tf.identity
+
+        self.mha = tf.keras.layers.MultiHeadAttention(
+            num_heads=self.num_heads, key_dim=self.hidden_dim // self.num_heads)
+        self.ffn = tf.keras.Sequential([
+            tf.keras.layers.Dense(self.ff_dim, activation='relu'),
+            tf.keras.layers.Dense(self.hidden_dim),
+        ])
+        self.norm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
+        self.norm2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
+        self.dropout = tf.keras.layers.Dropout(self.dropout_rate)
+
+    def call(self, inputs, training=False):
+        y = self.input_proj(inputs) if callable(self.input_proj) else self.input_proj(inputs)
+        for _ in range(self.n_steps):
+            attn_out = self.mha(y, y, y, training=training)
+            y1 = self.norm1(y + self.dropout(attn_out, training=training))
+            ffn_out = self.ffn(y1, training=training)
+            dy = self.norm2(y1 + self.dropout(ffn_out, training=training))
+            y = y + self.step_size * dy
+        return y
